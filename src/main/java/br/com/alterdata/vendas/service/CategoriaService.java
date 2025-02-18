@@ -1,0 +1,28 @@
+package br.com.alterdata.vendas.service;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import br.com.alterdata.vendas.dto.CategoriaDTO;
+import br.com.alterdata.vendas.model.Categoria;
+import br.com.alterdata.vendas.repository.CategoriaRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
+@Service
+@RequiredArgsConstructor
+@Log4j2
+public class CategoriaService {
+
+	public final CategoriaRepository categoriaRepository;
+	private final ModelMapper modelMapper;
+
+	public CategoriaDTO salvarCategoria(CategoriaDTO categoriaDto) {
+		log.info("[start] CategoriaService - salvarCategoria");
+		Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
+		Categoria categoriaSalva = categoriaRepository.save(categoria);
+		log.info("[finish] CategoriaService - salvarCategoria");
+		return modelMapper.map(categoriaSalva, CategoriaDTO.class);
+	}
+
+}
