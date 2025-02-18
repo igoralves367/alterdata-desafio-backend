@@ -15,15 +15,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Produto {
 
-    @Id @GeneratedValue private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull private String nome;
+	@NotNull
+	private String nome;
 
-    @NotNull private String descricao;
+	@NotNull
+	private String descricao;
 
-    @NotNull private String referencia;
+	@NotNull
+	private String referencia;
 
-    @NotNull
-    @Column(name = "valor_unitario")
-    private BigDecimal valorUnitario;
+	@NotNull
+	@Column(name = "valor_unitario")
+	private BigDecimal valorUnitario;
 }
