@@ -48,6 +48,7 @@ public class CategoriaService {
 
 	public CategoriaDTO obterCategoriaPorNome(String nomeCategoria) {
 		log.info("[start] CategoriaService - obterCategoriaPorNome");
+		log.info("[nomeCategoria] {}", nomeCategoria);
 		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
 		if (categoria == null) {
 			throw APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada");
@@ -64,5 +65,14 @@ public class CategoriaService {
 				.map(categoria -> modelMapper.map(categoria, CategoriaDTO.class))
 				.collect(Collectors.toList());
 	}
+
+	public CategoriaDTO buscarCategoriaPorId(Long id) {
+		log.info("[start] CategoriaService - buscarCategoriaPorId");
+		log.info("[idCategoria] {}", id);
+		 Categoria categoria = categoriaRepository.findById(id)
+				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrado"));
+		 log.info("[finish] CategoriaService - buscarCategoriaPorId");
+	        return modelMapper.map(categoria, CategoriaDTO.class);
+	    }
 
 }
