@@ -39,14 +39,15 @@ public class CategoriaService {
         return categoria;
 	}
 
-	public CategoriaDTO atualizarCategoria(Long id, String novaCategoria) {
-		log.info("[start] CategoriaService - atualizarCategoria");
-		Categoria categoriaAtual = categoriaRepository.findById(id)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrado"));
-        categoriaAtual.setNome(novaCategoria);
-        Categoria updatedCategoria = categoriaRepository.save(categoriaAtual);
-    	log.info("[finish] CategoriaService - atualizarCategoria");
-        return modelMapper.map(updatedCategoria, CategoriaDTO.class);
+
+	public CategoriaDTO obterCategoriaPorNome(String nomeCategoria) {
+		log.info("[start] CategoriaService - obterCategoriaPorNome");
+		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
+		if (categoria == null) {
+	        throw APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada");
+	    }
+        log.info("[finish] CategoriaService - obterCategoriaPorNome");
+        return modelMapper.map(categoria, CategoriaDTO.class);
 	}
 
 }

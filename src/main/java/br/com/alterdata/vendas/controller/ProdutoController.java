@@ -1,5 +1,7 @@
 package br.com.alterdata.vendas.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,22 +30,28 @@ public class ProdutoController {
 		return new ResponseEntity<>(criaProduto, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("buscarProduto/{id}")
 	public ResponseEntity<ProdutoDTO> buscarProdutoPorId(@PathVariable Long id) {
 		ProdutoDTO produto = produtoService.buscarProdutoPorId(id);
 		return new ResponseEntity<>(produto, HttpStatus.OK);
 
 	}
 
-    @PutMapping("/categoria/{id}")
-    public ResponseEntity<ProdutoDTO> atualizarCategoriaProduto(@PathVariable Long id, @RequestBody String novaCategoria) {
-        ProdutoDTO alterarProduto = produtoService.alterarProdutoCategoria(id, novaCategoria);
+    @PutMapping("/atualizaProduto/{id}")
+    public ResponseEntity<ProdutoDTO> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoDTO atualizaProduto) {
+        ProdutoDTO alterarProduto = produtoService.alterarProduto(id, atualizaProduto);
         return new ResponseEntity<>(alterarProduto, HttpStatus.OK);
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("deletarProduto/{id}")
     public ResponseEntity<Void> excluirProduto(@PathVariable Long id) {
         produtoService.deletarProduto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+    @GetMapping("/produtos/categoria/{NomeCategoria}")
+    public ResponseEntity<List<ProdutoDTO>> encontrarProdutosPorCategoria(@PathVariable String NomeCategoria) {
+        List<ProdutoDTO> produtos = produtoService.buscarProdutosPorCategoria(NomeCategoria);
+        return new ResponseEntity<>(produtos, HttpStatus.OK);
     }
 }

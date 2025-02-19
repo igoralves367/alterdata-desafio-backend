@@ -1,6 +1,8 @@
 package br.com.alterdata.vendas.service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,17 +55,17 @@ public class ProdutoService {
 		return modelMapper.map(produto, ProdutoDTO.class);
 	}
 
-	public ProdutoDTO alterarProdutoCategoria(Long id, String novaCategoria) {
-		log.info("[start] ProdutoService - alterarProdutoCategoria");
+	public ProdutoDTO alterarProduto(Long id, ProdutoDTO atualizaProduto) {
+		log.info("[start] ProdutoService - alterarProduto");
 		log.info("[idProduto] {}", id);
-		Produto produto = produtoRepository.findById(id)
+		Produto produtoAtual = produtoRepository.findById(id)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
-		CategoriaDTO categoria = categoriaService.atualizarCategoria(produto.getCategoria().getId(), novaCategoria);
-        produto.setCategoria(modelMapper.map(categoria, Categoria.class));
+		
+		produtoAtual.edita(atualizaProduto, modelMapper, categoriaService);
 
-        Produto updatedProduto = produtoRepository.save(produto);
-        log.info("[finish] ProdutoService - alterarProdutoCategoria");
-        return modelMapper.map(updatedProduto, ProdutoDTO.class);
+		Produto updatedProduto = produtoRepository.save(produtoAtual);
+		log.info("[finish] ProdutoService - alterarProduto");
+		return modelMapper.map(updatedProduto, ProdutoDTO.class);
 	}
 
 	public void deletarProduto(Long id) {
@@ -75,4 +77,18 @@ public class ProdutoService {
 		log.info("[finish] ProdutoService - deletarProduto");
 
 	}
+
+	public List<ProdutoDTO> buscarProdutosPorCategoria(String NomeCategoria) {
+		log.info("[start] ProdutoService - buscarProdutosPorCategoria");
+		log.info("[Categoria] {}", NomeCategoria);
+		CategoriaDTO categoria = categoriaService.obterCategoriaPorNome(NomeCategoria);
+		if (categoria == null) {
+			return Collections.emptyList();
+		}
+		List<Produto> produtos = produtoRepository.findByCategoria(modelMapper.map(categoria, Categoria.class));
+		log.info("[finish] ProdutoService - buscarProdutosPorCategoria");
+		return produtos.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class))
+				.collect(Collectors.toList());
+	}
+
 }
