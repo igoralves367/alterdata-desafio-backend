@@ -1,9 +1,11 @@
 package br.com.alterdata.vendas.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.alterdata.vendas.dto.CategoriaDTO;
+import br.com.alterdata.vendas.handler.APIException;
 import br.com.alterdata.vendas.model.Categoria;
 import br.com.alterdata.vendas.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,16 @@ public class CategoriaService {
         }
         log.info("[finish] CategoriaService - obterOuCriarCategoria");
         return categoria;
+	}
+
+	public CategoriaDTO atualizarCategoria(Long id, String novaCategoria) {
+		log.info("[start] CategoriaService - atualizarCategoria");
+		Categoria categoriaAtual = categoriaRepository.findById(id)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrado"));
+        categoriaAtual.setNome(novaCategoria);
+        Categoria updatedCategoria = categoriaRepository.save(categoriaAtual);
+    	log.info("[finish] CategoriaService - atualizarCategoria");
+        return modelMapper.map(updatedCategoria, CategoriaDTO.class);
 	}
 
 }

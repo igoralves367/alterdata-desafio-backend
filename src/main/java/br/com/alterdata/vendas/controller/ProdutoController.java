@@ -2,9 +2,11 @@ package br.com.alterdata.vendas.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,4 +34,16 @@ public class ProdutoController {
 		return new ResponseEntity<>(produto, HttpStatus.OK);
 
 	}
+
+    @PutMapping("/categoria/{id}")
+    public ResponseEntity<ProdutoDTO> atualizarCategoriaProduto(@PathVariable Long id, @RequestBody String novaCategoria) {
+        ProdutoDTO alterarProduto = produtoService.alterarProdutoCategoria(id, novaCategoria);
+        return new ResponseEntity<>(alterarProduto, HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirProduto(@PathVariable Long id) {
+        produtoService.deletarProduto(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

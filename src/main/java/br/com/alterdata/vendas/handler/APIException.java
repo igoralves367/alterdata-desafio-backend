@@ -41,8 +41,6 @@ public class APIException extends RuntimeException {
 		return e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
 	}
 	
-	
-
 	public ResponseEntity<ErrorApiResponse> buildErrorResponseEntity() {
 		return ResponseEntity
 				.status(statusException)
