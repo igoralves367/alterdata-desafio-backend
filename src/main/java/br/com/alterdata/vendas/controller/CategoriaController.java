@@ -1,7 +1,10 @@
 package br.com.alterdata.vendas.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,4 +30,10 @@ public class CategoriaController {
 		log.info("[finish] CategoriaController - criarCategoria");
 		return new ResponseEntity<>(criarCategoria, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/listarCategorias")
+    public ResponseEntity<List<CategoriaDTO>> listar() {
+        List<CategoriaDTO> ListaCategorias = categoriaService.listaCategorias();
+        return new ResponseEntity<>(ListaCategorias, HttpStatus.OK);
+    }
 }

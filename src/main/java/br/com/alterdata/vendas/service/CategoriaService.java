@@ -1,5 +1,8 @@
 package br.com.alterdata.vendas.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ public class CategoriaService {
 		if (categoriaRepository.existsByNomeIgnoreCase(categoriaDto.getNome())) {
 			throw APIException.build(HttpStatus.BAD_REQUEST, "Categoria já cadastrada.");
 		}
-		
+
 		Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		log.info("[finish] CategoriaService - salvarCategoria");
@@ -34,24 +37,32 @@ public class CategoriaService {
 	public Categoria obterOuCriarCategoria(String nomeCategoria) {
 		log.info("[start] CategoriaService - obterOuCriarCategoria");
 		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
-        if (categoria == null) {
-            categoria = new Categoria();
-            categoria.setNome(nomeCategoria);
-            categoria = categoriaRepository.save(categoria);
-        }
-        log.info("[finish] CategoriaService - obterOuCriarCategoria");
-        return categoria;
+		if (categoria == null) {
+			categoria = new Categoria();
+			categoria.setNome(nomeCategoria);
+			categoria = categoriaRepository.save(categoria);
+		}
+		log.info("[finish] CategoriaService - obterOuCriarCategoria");
+		return categoria;
 	}
-
 
 	public CategoriaDTO obterCategoriaPorNome(String nomeCategoria) {
 		log.info("[start] CategoriaService - obterCategoriaPorNome");
 		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
 		if (categoria == null) {
-	        throw APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada");
-	    }
-        log.info("[finish] CategoriaService - obterCategoriaPorNome");
-        return modelMapper.map(categoria, CategoriaDTO.class);
+			throw APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada");
+		}
+		log.info("[finish] CategoriaService - obterCategoriaPorNome");
+		return modelMapper.map(categoria, CategoriaDTO.class);
+	}
+
+	public List<CategoriaDTO> listaCategorias() {
+		log.info("[start] CategoriaService - listaCategorias");
+		List<Categoria> categorias = categoriaRepository.findAll();
+		log.info("[finish] CategoriaService - listaCategorias");
+		return categorias.stream()
+				.map(categoria -> modelMapper.map(categoria, CategoriaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 }
