@@ -21,6 +21,10 @@ public class CategoriaService {
 
 	public CategoriaDTO salvarCategoria(CategoriaDTO categoriaDto) {
 		log.info("[start] CategoriaService - salvarCategoria");
+		if (categoriaRepository.existsByNomeIgnoreCase(categoriaDto.getNome())) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Categoria já cadastrada.");
+		}
+		
 		Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		log.info("[finish] CategoriaService - salvarCategoria");

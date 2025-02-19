@@ -32,18 +32,19 @@ public class ProdutoService {
 	public List<Produto> listar() {
 		return produtoRepository.findAll();
 	}
-
+	
 	public ProdutoDTO criaProduto(ProdutoDTO produtoDTO) {
 		log.info("[start] ProdutoService - criaProduto");
-		if (produtoDTO.getCategoria().getNome() != null) {
-			Categoria categoria = categoriaService.obterOuCriarCategoria(produtoDTO.getCategoria().getNome());
-			produtoDTO.setCategoria(modelMapper.map(categoria, CategoriaDTO.class));
+		if (produtoRepository.existsByNomeIgnoreCase(produtoDTO.getNome())) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Já existe um produto com esse nome.");
 		}
+		Categoria categoria = categoriaService.obterOuCriarCategoria(produtoDTO.getCategoria().getNome());
 		Produto produto = modelMapper.map(produtoDTO, Produto.class);
+		produto.setCategoria(categoria);
 		Produto produtoSalvo = produtoRepository.save(produto);
 		log.info("[finish] ProdutoService - criaProduto");
-		return modelMapper.map(produtoSalvo, ProdutoDTO.class);
 
+		return modelMapper.map(produtoSalvo, ProdutoDTO.class);
 	}
 
 	public ProdutoDTO buscarProdutoPorId(Long id) {

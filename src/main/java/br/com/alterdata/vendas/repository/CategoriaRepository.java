@@ -9,4 +9,6 @@ import br.com.alterdata.vendas.model.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 
 	Categoria findByNome(String nome);
+
+	boolean existsByNomeIgnoreCase(String nome);
 }
