@@ -90,5 +90,17 @@ public class ProdutoService {
 		return produtos.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class))
 				.collect(Collectors.toList());
 	}
-
+	
+	public List<ProdutoDTO> pesquisarProdutos(String termo) {
+		log.info("[start] ProdutoService - pesquisarProdutos");
+		log.info("[termo] {}", termo);
+		List<Produto> produtos = produtoRepository.buscarProdutosPorTermo(termo);
+		
+		 if (produtos.isEmpty()) {
+			 throw APIException.build(HttpStatus.NOT_FOUND, "Nenhum produto encontrado para o termo: " + termo);
+		    }
+		log.info("[finish] ProdutoService - pesquisarProdutos");
+		return produtos.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class))
+				.collect(Collectors.toList());
+	}
 }
