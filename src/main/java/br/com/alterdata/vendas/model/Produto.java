@@ -31,4 +31,9 @@ public class Produto {
 	@NotNull
 	@Column(name = "valor_unitario")
 	private BigDecimal valorUnitario;
+
+	@ManyToOne
+	@JoinColumn(name = "categoria_id")
+	private Categoria categoria;
+
 }
