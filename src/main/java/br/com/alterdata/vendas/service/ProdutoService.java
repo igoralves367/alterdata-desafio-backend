@@ -76,7 +76,6 @@ public class ProdutoService {
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
 		produtoRepository.delete(produto);
 		log.info("[finish] ProdutoService - deletarProduto");
-
 	}
 
 	public List<ProdutoDTO> buscarProdutosPorCategoria(String NomeCategoria) {

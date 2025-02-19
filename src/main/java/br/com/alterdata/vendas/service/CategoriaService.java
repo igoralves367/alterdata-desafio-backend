@@ -70,9 +70,29 @@ public class CategoriaService {
 		log.info("[start] CategoriaService - buscarCategoriaPorId");
 		log.info("[idCategoria] {}", id);
 		 Categoria categoria = categoriaRepository.findById(id)
-				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrado"));
+				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
 		 log.info("[finish] CategoriaService - buscarCategoriaPorId");
 	        return modelMapper.map(categoria, CategoriaDTO.class);
 	    }
 
+	public void excluirCategoria(Long id) {
+		log.info("[start] ProdutoService - excluirCategoria");
+		log.info("[idCategoria] {}", id);
+		Categoria categoria = categoriaRepository.findById(id)
+				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+		categoriaRepository.delete(categoria);
+		log.info("[finish] ProdutoService - excluirCategoria");
+		
+	}
+
+	public CategoriaDTO atualizarCategoria(Long id, String novoNomeCategoria) {
+		log.info("[start] CategoriaService - atualizarCategoria");
+		log.info("[idCategoria] {}", id);
+		Categoria categoriaAtual = categoriaRepository.findById(id)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+        categoriaAtual.setNome(novoNomeCategoria);
+        log.info("[finish] CategoriaService - atualizarCategoria");
+        Categoria updatedCategoria = categoriaRepository.save(categoriaAtual);
+        return modelMapper.map(updatedCategoria, CategoriaDTO.class);
+	}
 }
