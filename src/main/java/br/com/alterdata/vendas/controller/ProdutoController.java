@@ -2,6 +2,8 @@ package br.com.alterdata.vendas.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("produtos")
 @RequiredArgsConstructor
 public class ProdutoController {
-	
+
 	private final ProdutoService produtoService;
 
 	@PostMapping
@@ -24,4 +26,10 @@ public class ProdutoController {
 		return new ResponseEntity<>(criaProduto, HttpStatus.CREATED);
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<ProdutoDTO> buscarProdutoPorId(@PathVariable Long id) {
+		ProdutoDTO produto = produtoService.buscarProdutoPorId(id);
+		return new ResponseEntity<>(produto, HttpStatus.OK);
+
+	}
 }

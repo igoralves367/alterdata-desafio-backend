@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.alterdata.vendas.dto.CategoriaDTO;
 import br.com.alterdata.vendas.dto.ProdutoDTO;
+import br.com.alterdata.vendas.handler.APIException;
 import br.com.alterdata.vendas.model.Categoria;
 import br.com.alterdata.vendas.model.Produto;
 import br.com.alterdata.vendas.repository.ProdutoRepository;
@@ -41,4 +43,13 @@ public class ProdutoService {
         return modelMapper.map(produtoSalvo, ProdutoDTO.class);
         
     }
+
+	public ProdutoDTO buscarProdutoPorId(Long id) {
+		log.info("[start] ProdutoService - buscarProdutoPorId");
+		log.info("[idProduto] {}", id);
+		Produto produto = produtoRepository.findById(id)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+		log.info("[finish] ProdutoService - buscarProdutoPorId");
+        return modelMapper.map(produto, ProdutoDTO.class);
+	}
 }
