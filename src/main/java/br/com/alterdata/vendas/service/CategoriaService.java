@@ -25,4 +25,16 @@ public class CategoriaService {
 		return modelMapper.map(categoriaSalva, CategoriaDTO.class);
 	}
 
+	public Categoria obterOuCriarCategoria(String nomeCategoria) {
+		log.info("[start] CategoriaService - obterOuCriarCategoria");
+		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
+        if (categoria == null) {
+            categoria = new Categoria();
+            categoria.setNome(nomeCategoria);
+            categoria = categoriaRepository.save(categoria);
+        }
+        log.info("[finish] CategoriaService - obterOuCriarCategoria");
+        return categoria;
+	}
+
 }

@@ -16,5 +16,6 @@ public class ProdutoDTO {
     private String descricao;
     private String referencia;
     private BigDecimal valorUnitario;
+    private CategoriaDTO categoria;
 
 }

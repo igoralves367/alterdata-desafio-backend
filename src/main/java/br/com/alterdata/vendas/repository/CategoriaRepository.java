@@ -8,4 +8,5 @@ import br.com.alterdata.vendas.model.Categoria;
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 
+	Categoria findByNome(String nome);
 }
