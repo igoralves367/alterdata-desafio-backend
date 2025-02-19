@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,6 +75,16 @@ public class ProdutosController {
 		log.info("[NomeCategoria] {}", NomeCategoria);
         List<ProdutoDTO> produtos = produtoService.buscarProdutosPorCategoria(NomeCategoria);
         log.info("[finish] ProdutosController - encontrarProdutosPorCategoria");
+        return new ResponseEntity<>(produtos, HttpStatus.OK);
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/pesquisar/{termo}")
+    public ResponseEntity<List<ProdutoDTO>> pesquisarProdutos(@PathVariable String termo) {
+        log.info("[start] ProdutosController - pesquisarProdutos");
+        log.info("[termo] {}", termo);
+        List<ProdutoDTO> produtos = produtoService.pesquisarProdutos(termo);
+        log.info("[finish] ProdutosController - pesquisarProdutos");
         return new ResponseEntity<>(produtos, HttpStatus.OK);
     }
 }
