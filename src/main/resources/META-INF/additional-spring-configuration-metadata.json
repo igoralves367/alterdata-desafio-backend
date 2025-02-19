@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "security.jwt.expire",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.expire'"
+  },
+  {
+    "name": "security.jwt.key-sign",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-sign'"
+  },
+  {
+    "name": "spring.main.allow-circular-references",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.main.allow-circular-references'"
+  }
+]}
