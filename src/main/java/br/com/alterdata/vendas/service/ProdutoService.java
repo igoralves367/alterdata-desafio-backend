@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +22,17 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ProdutoService {
 
-	@Autowired
-	private ProdutoRepository produtoRepository;
-
+	private final ProdutoRepository produtoRepository;
 	private final ModelMapper modelMapper;
 	private final CategoriaService categoriaService;
 
-	public List<Produto> listar() {
-		return produtoRepository.findAll();
+	public List<ProdutoDTO> listar() {
+		log.info("[start] ProdutoService - listar");
+		List<Produto> produtos = produtoRepository.findAll();
+		log.info("[finish] ProdutoService - listar");
+		return produtos.stream()
+                .map(produto -> modelMapper.map(produto, ProdutoDTO.class))
+                .collect(Collectors.toList());
 	}
 	
 	public ProdutoDTO criaProduto(ProdutoDTO produtoDTO) {
