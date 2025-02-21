@@ -17,11 +17,11 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
 	boolean existsByNomeIgnoreCase(String nome);
 
-	@Query("SELECT p FROM Produto p " + "WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :termo, '%')) "
-			+ "OR LOWER(p.descricao) LIKE LOWER(CONCAT('%', :termo, '%')) "
-			+ "OR LOWER(p.referencia) LIKE LOWER(CONCAT('%', :termo, '%')) "
-			+ "OR LOWER(p.categoria.nome) LIKE LOWER(CONCAT('%', :termo, '%')) "
-			+ "OR (CAST(:termo AS string) IS NOT NULL AND CAST(p.valorUnitario AS string) LIKE CONCAT('%', :termo, '%'))")
-	List<Produto> buscarProdutosPorTermo(@Param("termo") String termo);
+	@Query("SELECT p FROM Produto p LEFT JOIN FETCH p.categoria c " +
+		       "WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :termo, '%')) " +
+		       "OR LOWER(p.descricao) LIKE LOWER(CONCAT('%', :termo, '%')) " +
+		       "OR LOWER(p.referencia) LIKE LOWER(CONCAT('%', :termo, '%')) " +
+		       "OR LOWER(c.nome) LIKE LOWER(CONCAT('%', :termo, '%'))")
+		List<Produto> buscarProdutosPorTermo(@Param("termo") String termo);
 
 }
