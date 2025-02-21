@@ -49,16 +49,4 @@ public class DataHelper {
 		return loginDTO;
 	}
 
-//	public static User createUser() {
-//		return new User((int) 1L, "admin", "senha123", true);
-//	}
-//
-//	public static UserDTO createUserDTO() {
-//		return new UserDTO();
-//	}
-//
-//	public static LoginDTO createLoginDTO() {
-//		return new LoginDTO();
-//	}
-
 }

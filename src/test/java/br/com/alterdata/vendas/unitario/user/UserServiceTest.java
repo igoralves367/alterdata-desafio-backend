@@ -71,7 +71,6 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-
     @Test
     @DisplayName("Deveria carregar um usuário pelo login")
     void deveriaCarregarUsuarioPorLogin() {
