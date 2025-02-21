@@ -43,11 +43,10 @@ public class AtualizarProdutoIT {
     @DisplayName("Deveria atualizar um produto existente")
     void deveriaAtualizarProduto() throws Exception {
         String produtoAtualizadoJson = "{"
-                + "\"nome\": \"Notebook Gamer Pro\","
-                + "\"descricao\": \"Atualizado: Mais potência\","
-                + "\"referencia\": \"NTB5678\","
-                + "\"valorUnitario\": 8999.99,"
-                + "\"categoria\": { \"nome\": \"Eletrônicos\" }"
+                + "\"nome\": \"Motosserra Profissional Gasolina\","
+                + "\"descricao\": \"Modelo atualizado com maior potência\","
+                + "\"referencia\": \"TCS53H20\","
+                + "\"valorUnitario\": 450.00"
                 + "}";
 
         mockMvc.perform(put("/produtos/atualizaProduto/1")
@@ -55,8 +54,7 @@ public class AtualizarProdutoIT {
                 .content(produtoAtualizadoJson)
                 .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nome").value("Notebook Gamer Pro"))
-                .andExpect(jsonPath("$.descricao").value("Atualizado: Mais potência"))
-                .andExpect(jsonPath("$.valorUnitario").value(8999.99));
+                .andExpect(jsonPath("$.nome").value("Motosserra Profissional Gasolina"))
+                .andExpect(jsonPath("$.valorUnitario").value(450.00));
     }
 }

@@ -46,6 +46,9 @@ public class ListarProdutosIT {
                 .contentType(MediaType.APPLICATION_JSON)  
                 .with(user("admin").password("senha123").roles("ADMIN"))) 
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$[0].nome").value("Motosserra Semi Profissional Gasolina 50,2Cc Tcs53X-20"))
+                .andExpect(jsonPath("$[1].nome").value("Tesoura Para Poda + Serrote de Poda"))
+                .andExpect(jsonPath("$[2].nome").value("Kit para Jardinagem Horta Tramontina 04 Peças com Luva"));
     }
 }

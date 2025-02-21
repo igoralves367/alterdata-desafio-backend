@@ -3,11 +3,11 @@ package br.com.alterdata.vendas.integracao.produto;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,39 +30,33 @@ public class PesquisarProdutosIT {
     private WebApplicationContext webAppContextSetup;
 
     private MockMvc mockMvc;
-
+    
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
                 .apply(springSecurity()) 
                 .build();
     }
-
+    
     @Sql("/seeds/produtos.sql")
     @Test
-    @DisplayName("Deveria encontrar produtos por termo de pesquisa")
     void deveriaEncontrarProdutosPorPesquisa() throws Exception {
-    	
-    	String novoProdutoJson = "{"
-                + "\"nome\": \"Notebook Gamer\","
-                + "\"descricao\": \"Alta performance para jogos\","
-                + "\"referencia\": \"NTB1234\","
-                + "\"valorUnitario\": 7999.99,"
-                + "\"categoria\": { \"nome\": \"Eletrônicos\" }"
-                + "}";
-        mockMvc.perform(post("/produtos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(novoProdutoJson)
-                .with(user("admin").password("senha123").roles("ADMIN"))) 
-                .andExpect(status().isCreated());
-        
-        mockMvc.perform(get("/produtos/listarProdutos")  
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(user("admin").password("senha123").roles("ADMIN")));
-
-        mockMvc.perform(get("/produtos/pesquisar/Notebook")
+    	mockMvc.perform(get("/produtos/pesquisar/Poda")
+    	        .contentType(MediaType.APPLICATION_JSON)
+    	        .with(user("admin").password("senha123").roles("ADMIN")))
+    	        .andDo(print()) 
+    	        .andExpect(status().isOk())
+    	        .andExpect(jsonPath("$.length()").value(1))
+    	        .andExpect(jsonPath("$[0].nome").exists()); 
+    }
+    
+    @Sql("/seeds/produtos.sql")
+    @Test
+    void deveriaRetornarErroQuandoCategoriaNaoExiste() throws Exception {
+        mockMvc.perform(get("/produtos/categoria/CategoriaInexistente")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user("admin").password("senha123").roles("ADMIN")))
-                .andExpect(status().isOk());
+                .andDo(print()) 
+                .andExpect(status().isNotFound()); // Espera um 404
     }
 }
