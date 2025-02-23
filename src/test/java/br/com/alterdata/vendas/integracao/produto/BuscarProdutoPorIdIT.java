@@ -42,9 +42,9 @@ public class BuscarProdutoPorIdIT {
     @Test
     @DisplayName("Deveria buscar um produto por ID")
     void deveriaBuscarProdutoPorId() throws Exception {
-        mockMvc.perform(get("/produtos/buscarProduto/1")
-                .contentType(MediaType.APPLICATION_JSON)  
-                .with(user("admin").password("senha123").roles("ADMIN")))  
+        mockMvc.perform(get("/produtos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Motosserra Semi Profissional Gasolina 50,2Cc Tcs53X-20"));
     }

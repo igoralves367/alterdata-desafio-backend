@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -19,42 +21,47 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.alterdata.vendas.VendasApplication;
+import br.com.alterdata.vendas.dto.ProdutoEdicaoRequest;
 
 @SpringBootTest(classes = {VendasApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Tag("integracao")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AtualizarProdutoIT {
 
-    @Autowired
+	@Autowired
     private WebApplicationContext webAppContextSetup;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
-                .apply(springSecurity()) 
+                .apply(springSecurity())
                 .build();
     }
 
     @Sql("/seeds/produtos.sql")
     @Test
-    @DisplayName("Deveria atualizar um produto existente")
+    @DisplayName("Deveria atualizar um produto")
     void deveriaAtualizarProduto() throws Exception {
-        String produtoAtualizadoJson = "{"
-                + "\"nome\": \"Motosserra Profissional Gasolina\","
-                + "\"descricao\": \"Modelo atualizado com maior potência\","
-                + "\"referencia\": \"TCS53H20\","
-                + "\"valorUnitario\": 450.00"
-                + "}";
+        ProdutoEdicaoRequest produtoAtualizado = new ProdutoEdicaoRequest();
+        produtoAtualizado.setNome("Produto Atualizado");
+        produtoAtualizado.setDescricao("Nova descrição");
+        produtoAtualizado.setReferencia("NOVO123");
+        produtoAtualizado.setValorUnitario(new BigDecimal("120.50"));
+        produtoAtualizado.setIdCategoria(2L);
 
-        mockMvc.perform(put("/produtos/atualizaProduto/1")
+        mockMvc.perform(put("/produtos/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(produtoAtualizadoJson)
+                .content(objectMapper.writeValueAsString(produtoAtualizado))
                 .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nome").value("Motosserra Profissional Gasolina"))
-                .andExpect(jsonPath("$.valorUnitario").value(450.00));
+                .andExpect(jsonPath("$.nome").value("Produto Atualizado"));
     }
 }

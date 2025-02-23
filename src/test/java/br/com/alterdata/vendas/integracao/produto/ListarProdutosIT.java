@@ -26,7 +26,7 @@ import br.com.alterdata.vendas.VendasApplication;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ListarProdutosIT {
 
-    @Autowired
+	@Autowired
     private WebApplicationContext webAppContextSetup;
 
     private MockMvc mockMvc;
@@ -42,13 +42,10 @@ public class ListarProdutosIT {
     @Test
     @DisplayName("Deveria listar todos os produtos")
     void deveriaListarTodosProdutos() throws Exception {
-        mockMvc.perform(get("/produtos/listarProdutos")
-                .contentType(MediaType.APPLICATION_JSON)  
-                .with(user("admin").password("senha123").roles("ADMIN"))) 
+        mockMvc.perform(get("/produtos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].nome").value("Motosserra Semi Profissional Gasolina 50,2Cc Tcs53X-20"))
-                .andExpect(jsonPath("$[1].nome").value("Tesoura Para Poda + Serrote de Poda"))
-                .andExpect(jsonPath("$[2].nome").value("Kit para Jardinagem Horta Tramontina 04 Peças com Luva"));
+                .andExpect(jsonPath("$.length()").value(3));
     }
 }

@@ -3,6 +3,7 @@ package br.com.alterdata.vendas.integracao.produto;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,11 +39,14 @@ public class ExcluirProdutoIT {
 
     @Sql("/seeds/produtos.sql")
     @Test
-    @DisplayName("Deveria excluir um produto existente")
+    @DisplayName("Deveria excluir um produto")
     void deveriaExcluirProduto() throws Exception {
-        mockMvc.perform(delete("/produtos/deletarProduto/1")
-                .contentType(MediaType.APPLICATION_JSON)  
-                .with(user("admin").password("senha123").roles("ADMIN")))  
+        mockMvc.perform(delete("/produtos/1")
+                .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/produtos/1")
+                .with(user("admin").password("senha123").roles("ADMIN")))
+                .andExpect(status().isNotFound());
     }
 }
