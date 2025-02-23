@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,8 +24,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.alterdata.vendas.DataHelper;
-import br.com.alterdata.vendas.dto.LoginDTO;
-import br.com.alterdata.vendas.dto.UserDTO;
+import br.com.alterdata.vendas.dto.LoginRequest;
+import br.com.alterdata.vendas.dto.UserRequest;
 import br.com.alterdata.vendas.handler.APIException;
 import br.com.alterdata.vendas.model.User;
 import br.com.alterdata.vendas.repository.UserRepository;
@@ -48,8 +47,8 @@ public class UserServiceTest {
     private UserService userService;
 
     private User user;
-    private UserDTO userDTO;
-    private LoginDTO loginDTO;
+    private UserRequest userDTO;
+    private LoginRequest loginDTO;
 
     @BeforeEach
     void setup() {
@@ -59,12 +58,11 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria salvar um novo usuário")
     void deveriaSalvarUsuario() {
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(modelMapper.map(user, UserDTO.class)).thenReturn(userDTO);
+        when(modelMapper.map(user, UserRequest.class)).thenReturn(userDTO);
 
-        UserDTO usuarioSalvo = userService.save(userDTO);
+        UserRequest usuarioSalvo = userService.save(userDTO);
 
         assertNotNull(usuarioSalvo);
         assertEquals("admin", usuarioSalvo.getLogin());
@@ -72,7 +70,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria carregar um usuário pelo login")
     void deveriaCarregarUsuarioPorLogin() {
         when(userRepository.findByLogin(anyString())).thenReturn(Optional.of(user));
 
@@ -80,11 +77,10 @@ public class UserServiceTest {
 
         assertNotNull(userDetails);
         assertEquals("admin", userDetails.getUsername());
-        assertEquals(2, userDetails.getAuthorities().size()); // ADMIN e USER
+        assertEquals(2, userDetails.getAuthorities().size());
     }
 
     @Test
-    @DisplayName("Deveria lançar erro ao tentar carregar usuário inexistente")
     void deveriaLancarErroUsuarioNaoEncontrado() {
         when(userRepository.findByLogin(anyString())).thenReturn(Optional.empty());
 
@@ -95,7 +91,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria autenticar um usuário com senha válida")
     void deveriaAutenticarUsuario() {
         when(userRepository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(true);
@@ -107,7 +102,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria lançar erro ao tentar autenticar usuário com senha inválida")
     void deveriaLancarErroSenhaInvalida() {
         when(userRepository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(false);
@@ -119,12 +113,11 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria listar todos os usuários")
     void deveriaListarUsuarios() {
         when(userRepository.findAll()).thenReturn(List.of(user));
-        when(modelMapper.map(user, UserDTO.class)).thenReturn(userDTO);
+        when(modelMapper.map(user, UserRequest.class)).thenReturn(userDTO);
 
-        List<UserDTO> users = userService.findAll();
+        List<UserRequest> users = userService.findAll();
 
         assertNotNull(users);
         assertEquals(1, users.size());
@@ -132,7 +125,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria lançar erro ao tentar listar usuários inexistentes")
     void deveriaLancarErroListaVazia() {
         when(userRepository.findAll()).thenReturn(List.of());
 

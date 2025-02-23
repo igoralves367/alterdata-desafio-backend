@@ -20,42 +20,45 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import br.com.alterdata.vendas.VendasApplication;
+
 @SpringBootTest(classes = {VendasApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Tag("integracao")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class EncontrarCategoriaPorNomeIT {
 	
-	    @Autowired
-	    private WebApplicationContext webAppContextSetup;
+    @Autowired
+    private WebApplicationContext webAppContextSetup;
 
-	    private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	    @BeforeEach
-	    void setup() {
-	        mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
-	                .apply(springSecurity()) 
-	                .build();
-	    }
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
+                .apply(springSecurity()) 
+                .build();
+    }
 	    
-	    @Sql("/seeds/categorias.sql")
-	    @Test
-	    @DisplayName("Deveria encontrar uma categoria pelo nome")
-	    void deveriaEncontrarCategoriaPorNome() throws Exception {
-	        mockMvc.perform(get("/categorias/categoria/Jardinagem")
-	                .contentType(MediaType.APPLICATION_JSON)
-	                .with(user("admin").password("senha123").roles("ADMIN")))  
-	                .andExpect(status().isOk())
-	                .andExpect(jsonPath("$.nome").value("Jardinagem"));
-	    }
+    @Sql("/seeds/categorias.sql")
+    @Test
+    @DisplayName("Deveria encontrar uma categoria pelo nome")
+    void deveriaEncontrarCategoriaPorNome() throws Exception {
+        mockMvc.perform(get("/categorias/pesquisa")
+                .param("nome", "Jardinagem") 
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").password("senha123").roles("ADMIN")))  
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Jardinagem"));
+    }
 
-	    @Sql("/seeds/categorias.sql")
-	    @Test
-	    @DisplayName("Deveria retornar erro ao buscar uma categoria inexistente pelo nome")
-	    void deveriaRetornarErroAoBuscarCategoriaInexistentePorNome() throws Exception {
-	        mockMvc.perform(get("/categorias/categoria/Inexistente")
-	                .contentType(MediaType.APPLICATION_JSON)
-	                .with(user("admin").password("senha123").roles("ADMIN")))  
-	                .andExpect(status().isNotFound())
-	                .andExpect(jsonPath("$.message").value("Categoria não encontrada"));
-	    }
+    @Sql("/seeds/categorias.sql")
+    @Test
+    @DisplayName("Deveria retornar erro ao buscar uma categoria inexistente pelo nome")
+    void deveriaRetornarErroAoBuscarCategoriaInexistentePorNome() throws Exception {
+        mockMvc.perform(get("/categorias/pesquisa")
+                .param("nome", "Inexistente") 
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").password("senha123").roles("ADMIN")))  
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Categoria não encontrada"));
+    }
 }

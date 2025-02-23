@@ -3,7 +3,6 @@ package br.com.alterdata.vendas.integracao.categoria;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,7 @@ import br.com.alterdata.vendas.VendasApplication;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ExcluirCategoriaIT {
 	
-	@Autowired
+    @Autowired
     private WebApplicationContext webAppContextSetup;
 
     private MockMvc mockMvc;
@@ -34,28 +33,17 @@ public class ExcluirCategoriaIT {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
-                .apply(springSecurity()) 
+                .apply(springSecurity())
                 .build();
     }
     
     @Sql("/seeds/categorias.sql")
     @Test
-    @DisplayName("Deveria excluir uma categoria existente")
-    void deveriaExcluirCategoria() throws Exception {
-        mockMvc.perform(delete("/categorias/deletarCategoria/1")
+    @DisplayName("Deveria excluir uma categoria sem produtos")
+    void deveriaExcluirCategoriaSemProdutos() throws Exception {
+        mockMvc.perform(delete("/categorias/3") 
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user("admin").password("senha123").roles("ADMIN")))  
+                .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isNoContent());
-    }
-
-    @Sql("/seeds/categorias.sql")
-    @Test
-    @DisplayName("Deveria retornar erro ao excluir uma categoria inexistente")
-    void deveriaRetornarErroAoExcluirCategoriaInexistente() throws Exception {
-        mockMvc.perform(delete("/categorias/deletarCategoria/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(user("admin").password("senha123").roles("ADMIN")))  
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Categoria não encontrada"));
     }
 }

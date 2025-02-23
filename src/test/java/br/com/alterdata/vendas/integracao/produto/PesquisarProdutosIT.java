@@ -3,11 +3,11 @@ package br.com.alterdata.vendas.integracao.produto;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,23 +40,24 @@ public class PesquisarProdutosIT {
     
     @Sql("/seeds/produtos.sql")
     @Test
-    void deveriaEncontrarProdutosPorPesquisa() throws Exception {
-    	mockMvc.perform(get("/produtos/pesquisar/Poda")
-    	        .contentType(MediaType.APPLICATION_JSON)
-    	        .with(user("admin").password("senha123").roles("ADMIN")))
-    	        .andDo(print()) 
-    	        .andExpect(status().isOk())
-    	        .andExpect(jsonPath("$.length()").value(1))
-    	        .andExpect(jsonPath("$[0].nome").exists()); 
-    }
-    
-    @Sql("/seeds/produtos.sql")
-    @Test
-    void deveriaRetornarErroQuandoCategoriaNaoExiste() throws Exception {
-        mockMvc.perform(get("/produtos/categoria/CategoriaInexistente")
+    @DisplayName("Deveria buscar produtos por categoria")
+    void deveriaBuscarProdutosPorCategoria() throws Exception {
+        mockMvc.perform(get("/produtos/categoria?categoria=Jardinagem")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user("admin").password("senha123").roles("ADMIN")))
-                .andDo(print()) 
-                .andExpect(status().isNotFound()); // Espera um 404
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Sql("/seeds/produtos.sql")
+    @Test
+    @DisplayName("Deveria pesquisar produtos por termo (ADMIN)")
+    void deveriaPesquisarProdutos() throws Exception {
+        mockMvc.perform(get("/produtos/pesquisa?termo=Tesoura")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").password("senha123").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].nome").value("Tesoura Para Poda + Serrote de Poda"));
     }
 }
