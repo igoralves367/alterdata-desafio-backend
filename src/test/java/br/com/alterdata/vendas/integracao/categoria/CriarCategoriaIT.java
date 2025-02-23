@@ -32,7 +32,7 @@ public class CriarCategoriaIT {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
-                .apply(springSecurity()) 
+                .apply(springSecurity())
                 .build();
     }
 
@@ -44,8 +44,7 @@ public class CriarCategoriaIT {
         mockMvc.perform(post("/categorias")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(novaCategoriaJson)
-                .with(user("admin").password("senha123").roles("ADMIN"))) 
+                .with(user("admin").password("senha123").roles("ADMIN")))
                 .andExpect(status().isCreated());
     }
 }
-

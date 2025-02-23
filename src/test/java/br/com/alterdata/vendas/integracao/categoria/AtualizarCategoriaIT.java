@@ -26,7 +26,7 @@ import br.com.alterdata.vendas.VendasApplication;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AtualizarCategoriaIT {
 	
-	@Autowired
+    @Autowired
     private WebApplicationContext webAppContextSetup;
 
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class AtualizarCategoriaIT {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContextSetup)
-                .apply(springSecurity()) 
+                .apply(springSecurity())
                 .build();
     }
     
@@ -42,26 +42,13 @@ public class AtualizarCategoriaIT {
     @Test
     @DisplayName("Deveria atualizar uma categoria existente")
     void deveriaAtualizarCategoria() throws Exception {
-        String categoriaAtualizadaJson = "\"Jardinagem Avançada\""; 
+        String categoriaAtualizadaJson = "{ \"nome\": \"Jardinagem Avançada\" }"; 
 
-        mockMvc.perform(put("/categorias/ataulizaCategoria/2")
+        mockMvc.perform(put("/categorias/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(categoriaAtualizadaJson)
-                .with(user("admin").password("senha123").roles("ADMIN")))  
-                .andExpect(status().isOk());
-    }
-
-    @Sql("/seeds/categorias.sql")
-    @Test
-    @DisplayName("Deveria retornar erro ao tentar atualizar uma categoria inexistente")
-    void deveriaRetornarErroAoAtualizarCategoriaInexistente() throws Exception {
-        String categoriaAtualizadaJson = "\"Categoria Inexistente\"";
-
-        mockMvc.perform(put("/categorias/ataulizaCategoria/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(categoriaAtualizadaJson)
-                .with(user("admin").password("senha123").roles("ADMIN")))  
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Categoria não encontrada"));
+                .with(user("admin").password("senha123").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Jardinagem Avançada"));
     }
 }

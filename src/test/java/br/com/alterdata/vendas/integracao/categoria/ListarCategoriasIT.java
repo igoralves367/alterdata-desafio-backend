@@ -42,7 +42,7 @@ public class ListarCategoriasIT {
     @Test
     @DisplayName("Deveria listar todas as categorias")
     void deveriaListarCategorias() throws Exception {
-        mockMvc.perform(get("/categorias/listarCategorias")
+        mockMvc.perform(get("/categorias")
                 .contentType(MediaType.APPLICATION_JSON)  
                 .with(user("admin").password("senha123").roles("ADMIN"))) 
                 .andExpect(status().isOk())

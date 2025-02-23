@@ -42,7 +42,7 @@ public class buscarCategoriaIT {
 	@Test
 	@DisplayName("Deveria buscar uma categoria por ID")
 	void deveriaBuscarCategoriaPorId() throws Exception {
-	    mockMvc.perform(get("/categorias/buscarProduto/1")
+	    mockMvc.perform(get("/categorias/1")
 	            .contentType(MediaType.APPLICATION_JSON)
 	            .with(user("admin").password("senha123").roles("ADMIN")))  
 	            .andExpect(status().isOk())
@@ -53,7 +53,7 @@ public class buscarCategoriaIT {
 	@Test
 	@DisplayName("Deveria retornar erro ao buscar uma categoria inexistente")
 	void deveriaRetornarErroAoBuscarCategoriaInexistente() throws Exception {
-	    mockMvc.perform(get("/categorias/buscarProduto/999")
+	    mockMvc.perform(get("/categorias/999")
 	            .contentType(MediaType.APPLICATION_JSON)
 	            .with(user("admin").password("senha123").roles("ADMIN")))  
 	            .andExpect(status().isNotFound())
