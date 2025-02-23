@@ -50,12 +50,13 @@ public class AtualizarProdutoIT {
     @Test
     @DisplayName("Deveria atualizar um produto")
     void deveriaAtualizarProduto() throws Exception {
-        ProdutoEdicaoRequest produtoAtualizado = new ProdutoEdicaoRequest();
-        produtoAtualizado.setNome("Produto Atualizado");
-        produtoAtualizado.setDescricao("Nova descrição");
-        produtoAtualizado.setReferencia("NOVO123");
-        produtoAtualizado.setValorUnitario(new BigDecimal("120.50"));
-        produtoAtualizado.setIdCategoria(2L);
+        ProdutoEdicaoRequest produtoAtualizado = ProdutoEdicaoRequest.builder()
+                .nome("Produto Atualizado")
+                .descricao("Nova descrição")
+                .referencia("NOVO123")
+                .valorUnitario(new BigDecimal("120.50"))
+                .idCategoria(2L)
+                .build();
 
         mockMvc.perform(put("/produtos/1")
                 .contentType(MediaType.APPLICATION_JSON)

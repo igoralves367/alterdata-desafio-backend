@@ -50,12 +50,13 @@ public class CriarProdutoIT {
     @Test
     @DisplayName("Deveria criar um novo produto")
     void deveriaCriarProduto() throws Exception {
-        ProdutoCriacaoRequest produto = new ProdutoCriacaoRequest();
-        produto.setNome("Produto Teste");
-        produto.setDescricao("Descrição do Produto Teste");
-        produto.setReferencia("REF123");
-        produto.setValorUnitario(new BigDecimal("99.99"));
-        produto.setIdCategoria(1L);
+        ProdutoCriacaoRequest produto = ProdutoCriacaoRequest.builder()
+                .nome("Produto Teste")
+                .descricao("Descrição do Produto Teste")
+                .referencia("REF123")
+                .valorUnitario(new BigDecimal("99.99"))
+                .idCategoria(1L)
+                .build();
 
         mockMvc.perform(post("/produtos")
                 .contentType(MediaType.APPLICATION_JSON)
