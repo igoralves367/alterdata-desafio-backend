@@ -26,15 +26,16 @@ public class DataHelper {
     }
 
     public static CategoriaRequest createCategoriaRequest() {
-        CategoriaRequest categoriaRequest = new CategoriaRequest();
-        categoriaRequest.setNome("Eletrônicos");
-        return categoriaRequest;
+        return CategoriaRequest.builder()
+                .id(1L)
+                .nome("Eletrônicos")
+                .build();
     }
 
     public static CategoriaEdicaoRequest createCategoriaEdicaoRequest() {
-        CategoriaEdicaoRequest categoriaEdicaoRequest = new CategoriaEdicaoRequest();
-        categoriaEdicaoRequest.setNome("Casa & Decoração");
-        return categoriaEdicaoRequest;
+        return CategoriaEdicaoRequest.builder()
+                .nome("Casa & Decoração")
+                .build();
     }
 
     public static CategoriaResponse createCategoriaResponse() {
@@ -61,23 +62,23 @@ public class DataHelper {
     }
 
     public static ProdutoCriacaoRequest createProdutoRequest() {
-        ProdutoCriacaoRequest produtoRequest = new ProdutoCriacaoRequest();
-        produtoRequest.setNome("Smartphone");
-        produtoRequest.setDescricao("Smartphone de última geração");
-        produtoRequest.setReferencia("REF1234");
-        produtoRequest.setValorUnitario(new BigDecimal("2999.99"));
-        produtoRequest.setIdCategoria(1L);
-        return produtoRequest;
+        return ProdutoCriacaoRequest.builder()
+                .nome("Smartphone")
+                .descricao("Smartphone de última geração")
+                .referencia("REF1234")
+                .valorUnitario(new BigDecimal("2999.99"))
+                .idCategoria(1L)
+                .build();
     }
 
     public static ProdutoEdicaoRequest createProdutoEdicaoRequest() {
-        ProdutoEdicaoRequest produtoEdicaoRequest = new ProdutoEdicaoRequest();
-        produtoEdicaoRequest.setNome("Smartphone Pro");
-        produtoEdicaoRequest.setDescricao("Edição avançada do Smartphone");
-        produtoEdicaoRequest.setReferencia("REF5678");
-        produtoEdicaoRequest.setValorUnitario(new BigDecimal("3999.99"));
-        produtoEdicaoRequest.setIdCategoria(1L);
-        return produtoEdicaoRequest;
+        return ProdutoEdicaoRequest.builder()
+                .nome("Smartphone Pro")
+                .descricao("Edição avançada do Smartphone")
+                .referencia("REF5678")
+                .valorUnitario(new BigDecimal("3999.99"))
+                .idCategoria(1L)
+                .build();
     }
 
     public static ProdutoResponse createProdutoResponse() {
