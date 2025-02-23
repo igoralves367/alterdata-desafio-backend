@@ -1,0 +1,860 @@
+{
+	"info": {
+		"_postman_id": "c5f6258e-7efa-4cb5-a1f1-f1cad375f15c",
+		"name": "AltterDataDesafio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23094206",
+		"_collection_link": "https://martian-shuttle-285139.postman.co/workspace/AlterData~fec29abd-84a4-4f87-92bf-6e766a30a6c8/collection/23094206-c5f6258e-7efa-4cb5-a1f1-f1cad375f15c?action=share&source=collection_link&creator=23094206"
+	},
+	"item": [
+		{
+			"name": "Categoria",
+			"item": [
+				{
+					"name": "Nova Categoria Alimentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"nome\": \"Alimentos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/categorias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nova Categoria Bebidas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"nome\": \"Bebidas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/categorias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todas as Categorias",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/categorias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Categoria por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/categorias/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Nome da Categoria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "Alimentos",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/categorias/pesquisa?nome=Alimentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"pesquisa"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Alimentos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualiza Categoria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Equipamentos para Jardinagem\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/categorias/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delata Categoria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/categorias/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Salvar Produto Açucar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"nome\": \"Açucar Mascavo\",\r\n  \"descricao\": \"1kg\",\r\n  \"referencia\": \"100% Natual Guimarães\",\r\n  \"valorUnitario\": 12.00,\r\n  \"idCategoria\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'http://localhost:8080/produtos' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"idProduto\": 0,\r\n  \"nome\": \"Açucar\",\r\n  \"descricao\": \"1kg de Açucar\",\r\n  \"referencia\": \"Demerara\",\r\n  \"valorUnitario\": 12.00\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Produto Cafe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZ29yIiwiZXhwIjoxNzQwMjY1MjQwfQ.mlpncGyaTGtd7TI8c_x8nN9kNZBI3qWlyMNq8ONMN2aEbyaCUoL1ywVqbglHDoSULaoWNKb0Eh9rLoafCSN5cg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"nome\": \"Café Paquetá\",\r\n  \"descricao\": \"500g\",\r\n  \"referencia\": \"Paquetá\",\r\n  \"valorUnitario\": 9.00,\r\n  \"idCategoria\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'http://localhost:8080/produtos' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"idProduto\": 0,\r\n  \"nome\": \"Açucar\",\r\n  \"descricao\": \"1kg de Açucar\",\r\n  \"referencia\": \"Demerara\",\r\n  \"valorUnitario\": 12.00\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar produto Tesoura Para Poda",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZ29yIiwiZXhwIjoxNzQwMTM1MDkyfQ.unKe0jbmdjdHQy3vPrI3mkBYbyAY51QAQmgUhlUUFLNYUAwAB-VH5Mm8Nj73Ht2YvSrgJrCaqP3jd7uCDiKejQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 2,\r\n  \"nome\": \"Tesoura Para Poda + Serrote de Poda\",\r\n  \"descricao\": \"Tesourão para Poda Linha Bronze, para podar frutíferas, flores e plantas ornamentais, galhos e ramos de árvores onde não é possível alcançar com as tesouras normais. Para ajudar no seu trabalho, esse jogo contém um serrote para poda com 2 lâminas.\",\r\n  \"referencia\": \"KIT140\",\r\n  \"valorUnitario\": 163.54,\r\n  \"categoria\": {\r\n    \"id\": 1,\r\n    \"nome\": \"Ferramentas de Jardinagem\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'http://localhost:8080/produtos' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"idProduto\": 0,\r\n  \"nome\": \"Açucar\",\r\n  \"descricao\": \"1kg de Açucar\",\r\n  \"referencia\": \"Demerara\",\r\n  \"valorUnitario\": 12.00\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Lista Produtos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'http://localhost:8080/produtos' \\\r\n  -H 'accept: */*'"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Produto por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZ29yIiwiZXhwIjoxNzQwMjY0NDkzfQ.faC0DmfmVaFK5Hp0XpZid6h7-rLf3jmuHrHJ140IEKES7KyddcW2PsKdaxlKqz9H8H_7XsMD6gZ00J82DDvJLg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/produtos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/produtos/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Produto pela Categoria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/produtos/categoria?categoria=Alimentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"categoria"
+							],
+							"query": [
+								{
+									"key": "categoria",
+									"value": "Alimentos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualiza Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Café Paquetá\",\n  \"descricao\": \"500g\",\n  \"referencia\": \"Paquetá\",\n  \"valorUnitario\": 9.00,\n  \"idCategoria\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Termo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/produtos/pesquisa?termo=Açucar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"pesquisa"
+							],
+							"query": [
+								{
+									"key": "termo",
+									"value": "Açucar"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Segurança",
+			"item": [
+				{
+					"name": "Criar Usuário ADM",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"igor\",\r\n  \"password\": \"123456\",\r\n  \"admin\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Usuário User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"raquel\",\r\n  \"password\": \"123456\",\r\n  \"admin\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Adm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"igor\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"raquel\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todos Usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXF1ZWwiLCJleHAiOjE3NDAyNjY4MDh9.MhlbgtJsHeGvP178rpHLiLCfxxAlo59e7EoIB5F19AX7AkUiqYCpAkgzH64ciHXSYu10zDSbkqWRAJ9P4QbxFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
