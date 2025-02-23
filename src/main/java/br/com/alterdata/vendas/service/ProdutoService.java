@@ -1,17 +1,15 @@
 package br.com.alterdata.vendas.service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import br.com.alterdata.vendas.dto.CategoriaDTO;
-import br.com.alterdata.vendas.dto.ProdutoDTO;
+import br.com.alterdata.vendas.dto.ProdutoCriacaoRequest;
+import br.com.alterdata.vendas.dto.ProdutoEdicaoRequest;
+import br.com.alterdata.vendas.dto.ProdutoListaResponse;
+import br.com.alterdata.vendas.dto.ProdutoResponse;
 import br.com.alterdata.vendas.handler.APIException;
-import br.com.alterdata.vendas.model.Categoria;
 import br.com.alterdata.vendas.model.Produto;
 import br.com.alterdata.vendas.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,86 +21,67 @@ import lombok.extern.log4j.Log4j2;
 public class ProdutoService {
 
 	private final ProdutoRepository produtoRepository;
-	private final ModelMapper modelMapper;
 	private final CategoriaService categoriaService;
 
-	public List<ProdutoDTO> listar() {
-		log.info("[start] ProdutoService - listar");
-		List<Produto> produtos = produtoRepository.findAll();
-		log.info("[finish] ProdutoService - listar");
-		return produtos.stream()
-                .map(produto -> modelMapper.map(produto, ProdutoDTO.class))
-                .collect(Collectors.toList());
+	public List<ProdutoListaResponse> listar() {
+		log.debug("[start] ProdutoService - listar");
+		List<Produto> produtos = produtoRepository.findAllWithCategoria();
+		log.debug("[finish] ProdutoService - listar");
+		return ProdutoListaResponse.converte(produtos);
 	}
 	
-	public ProdutoDTO criaProduto(ProdutoDTO produtoDTO) {
-		log.info("[start] ProdutoService - criaProduto");
-		if (produtoRepository.existsByNomeIgnoreCase(produtoDTO.getNome())) {
-			throw APIException.build(HttpStatus.BAD_REQUEST, "Já existe um produto com esse nome.");
-		}
-		Categoria categoria = categoriaService.obterOuCriarCategoria(produtoDTO.getCategoria().getNome());
-		Produto produto = modelMapper.map(produtoDTO, Produto.class);
-		produto.setCategoria(categoria);
-		Produto produtoSalvo = produtoRepository.save(produto);
-		log.info("[finish] ProdutoService - criaProduto");
-
-		return modelMapper.map(produtoSalvo, ProdutoDTO.class);
+	public ProdutoResponse criaProduto(ProdutoCriacaoRequest produtoDTO) {
+		log.debug("[start] ProdutoService - criaProduto");
+		Produto produto = new Produto(produtoDTO, categoriaService);
+		produtoRepository.save(produto);
+		log.debug("[finish] ProdutoService - criaProduto");
+		return new ProdutoResponse(produto);
 	}
 
-	public ProdutoDTO buscarProdutoPorId(Long id) {
-		log.info("[start] ProdutoService - buscarProdutoPorId");
-		log.info("[idProduto] {}", id);
-		Produto produto = produtoRepository.findById(id)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
-		log.info("[finish] ProdutoService - buscarProdutoPorId");
-		return modelMapper.map(produto, ProdutoDTO.class);
+	public ProdutoListaResponse buscarProdutoPorId(Long id) {
+		log.debug("[start] ProdutoService - buscarProdutoPorId");
+		log.debug("[idProduto] {}", id);
+		Produto produto = buscaProdutoPorId(id);
+		log.debug("[finish] ProdutoService - buscarProdutoPorId");
+		return new ProdutoListaResponse(produto);
 	}
 
-	public ProdutoDTO alterarProduto(Long id, ProdutoDTO atualizaProduto) {
-		log.info("[start] ProdutoService - alterarProduto");
-		log.info("[idProduto] {}", id);
-		Produto produtoAtual = produtoRepository.findById(id)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
-		
-		produtoAtual.edita(atualizaProduto, modelMapper, categoriaService);
-
-		Produto updatedProduto = produtoRepository.save(produtoAtual);
-		log.info("[finish] ProdutoService - alterarProduto");
-		return modelMapper.map(updatedProduto, ProdutoDTO.class);
+	public ProdutoResponse alterarProduto(Long id, ProdutoEdicaoRequest atualizaProduto) {
+		log.debug("[start] ProdutoService - alterarProduto");
+		log.debug("[idProduto] {}", id);
+		Produto produtoNovo = buscaProdutoPorId(id);
+		produtoNovo.edita(atualizaProduto, categoriaService);
+		produtoRepository.save(produtoNovo);
+		log.debug("[finish] ProdutoService - alterarProduto");
+		return new ProdutoResponse(produtoNovo);
 	}
 
 	public void deletarProduto(Long id) {
-		log.info("[start] ProdutoService - deletarProduto");
-		log.info("[idProduto] {}", id);
-		Produto produto = produtoRepository.findById(id)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+		log.debug("[start] ProdutoService - deletarProduto");
+		log.debug("[idProduto] {}", id);
+		Produto produto = buscaProdutoPorId(id);
 		produtoRepository.delete(produto);
-		log.info("[finish] ProdutoService - deletarProduto");
+		log.debug("[finish] ProdutoService - deletarProduto");
 	}
 
-	public List<ProdutoDTO> buscarProdutosPorCategoria(String NomeCategoria) {
-		log.info("[start] ProdutoService - buscarProdutosPorCategoria");
-		log.info("[Categoria] {}", NomeCategoria);
-		CategoriaDTO categoria = categoriaService.obterCategoriaPorNome(NomeCategoria);
-		if (categoria == null) {
-			return Collections.emptyList();
-		}
-		List<Produto> produtos = produtoRepository.findByCategoria(modelMapper.map(categoria, Categoria.class));
-		log.info("[finish] ProdutoService - buscarProdutosPorCategoria");
-		return produtos.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class))
-				.collect(Collectors.toList());
+	private Produto buscaProdutoPorId(Long id) {
+		return produtoRepository.findByIdWithCategoria(id)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado"));
 	}
 	
-	public List<ProdutoDTO> pesquisarProdutos(String termo) {
-		log.info("[start] ProdutoService - pesquisarProdutos");
-		log.info("[termo] {}", termo);
+	public List<ProdutoListaResponse> buscarProdutosPorCategoria(String NomeCategoria) {
+		log.debug("[start] ProdutoService - buscarProdutosPorCategoria");
+		log.debug("[Categoria] {}", NomeCategoria);
+		List<Produto> produtos = produtoRepository.findByCategoria(NomeCategoria);
+		log.debug("[finish] ProdutoService - buscarProdutosPorCategoria");
+		return ProdutoListaResponse.converte(produtos);
+	}
+	
+	public List<ProdutoListaResponse> pesquisarProdutos(String termo) {
+		log.debug("[start] ProdutoService - pesquisarProdutos");
+		log.debug("[termo] {}", termo);
 		List<Produto> produtos = produtoRepository.buscarProdutosPorTermo(termo);
-		
-		 if (produtos.isEmpty()) {
-			 throw APIException.build(HttpStatus.NOT_FOUND, "Nenhum produto encontrado para o termo: " + termo);
-		    }
-		log.info("[finish] ProdutoService - pesquisarProdutos");
-		return produtos.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class))
-				.collect(Collectors.toList());
+		log.debug("[finish] ProdutoService - pesquisarProdutos");
+		return ProdutoListaResponse.converte(produtos);
 	}
 }
