@@ -2,20 +2,20 @@ package br.com.alterdata.vendas.dto;
 
 import java.math.BigDecimal;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProdutoDTO {
+@Getter
+@Setter
+@ToString
+public class ProdutoCriacaoRequest {
 	
 	private Long id;
     private String nome;
     private String descricao;
     private String referencia;
     private BigDecimal valorUnitario;
-    private CategoriaDTO categoria;
+    private Long idCategoria;
 
 }
