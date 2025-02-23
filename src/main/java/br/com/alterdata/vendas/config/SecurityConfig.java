@@ -47,20 +47,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	    protected void configure(HttpSecurity http) throws Exception {
 	        http
 	            .csrf().disable()
-	            .authorizeRequests(authorizeRequests ->
-	                authorizeRequests
-	                    .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-	                    .antMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
-	                    .antMatchers("/produtos/pesquisar/**").hasRole("ADMIN")
-	                    .antMatchers("/produtos/**").hasAnyRole(RoleConstants.ADMIN, RoleConstants.USER)
-	                    .antMatchers("/api/categorias/nome").hasRole(RoleConstants.ADMIN)
-	                    .antMatchers("/api/categorias/**").hasAnyRole(RoleConstants.ADMIN, RoleConstants.USER)
-	                    .antMatchers("/usuarios/all").hasRole(RoleConstants.ADMIN)
-	                    .anyRequest().authenticated()
-	            )
-	            .sessionManagement(sessionManagement ->
-	                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	            )
+	            .authorizeRequests()
+	            
+	            .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+	            
+	            .antMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
+	            .antMatchers("/usuarios/all").hasRole(RoleConstants.ADMIN)
+
+	            .antMatchers(HttpMethod.POST, "/produtos").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.PUT, "/produtos/**").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.DELETE, "/produtos/**").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.GET, "/produtos/**").hasAnyRole(RoleConstants.ADMIN, RoleConstants.USER)
+
+	            .antMatchers("/produtos/pesquisa").hasRole(RoleConstants.ADMIN)
+
+	            .antMatchers(HttpMethod.POST, "/categorias").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.PUT, "/categorias/**").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.DELETE, "/categorias/**").hasRole(RoleConstants.ADMIN)
+	            .antMatchers(HttpMethod.GET, "/categorias/**").hasAnyRole(RoleConstants.ADMIN, RoleConstants.USER)
+
+	            .anyRequest().authenticated()
+	            .and()
+	            .sessionManagement()
+	            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	            .and()
 	            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 	    }
+
 }

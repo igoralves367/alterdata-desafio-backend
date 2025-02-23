@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.alterdata.vendas.config.RoleConstants;
-import br.com.alterdata.vendas.dto.LoginDTO;
-import br.com.alterdata.vendas.dto.UserDTO;
+import br.com.alterdata.vendas.dto.LoginRequest;
+import br.com.alterdata.vendas.dto.UserRequest;
 import br.com.alterdata.vendas.handler.APIException;
 import br.com.alterdata.vendas.model.User;
 import br.com.alterdata.vendas.repository.UserRepository;
@@ -31,12 +31,12 @@ public class UserService implements UserDetailsService {
 	private final PasswordEncoder encoder;
 
 	@Transactional
-	public UserDTO save(UserDTO dto) {
+	public UserRequest save(UserRequest dto) {
 		User user;
 		user = User.builder().login(dto.getLogin()).password(dto.getPassword()).admin(dto.isAdmin()).build();
 
 		user = userRepository.save(user);
-		return modelMapper.map(user, UserDTO.class);
+		return modelMapper.map(user, UserRequest.class);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
 		}).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Login não encontrado"));
 	}
 
-	public UserDetails authenticate(LoginDTO dto) {
+	public UserDetails authenticate(LoginRequest dto) {
 		UserDetails loadedUser = loadUserByUsername(dto.getLogin());
 		boolean match = encoder.matches(dto.getPassword(), loadedUser.getPassword());
 		if (match) {
@@ -59,11 +59,11 @@ public class UserService implements UserDetailsService {
 		throw APIException.build(HttpStatus.UNAUTHORIZED, "Senha inválida");
 	}
 
-	public List<UserDTO> findAll() {
+	public List<UserRequest> findAll() {
 		List<User> users = userRepository.findAll();
 
 		if (!users.isEmpty()) {
-			return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
+			return users.stream().map(user -> modelMapper.map(user, UserRequest.class)).collect(Collectors.toList());
 		} else {
 			throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não encontrado");
 		}

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.alterdata.vendas.dto.LoginDTO;
-import br.com.alterdata.vendas.dto.TokenDTO;
-import br.com.alterdata.vendas.dto.UserDTO;
+import br.com.alterdata.vendas.dto.LoginRequest;
+import br.com.alterdata.vendas.dto.TokenResponse;
+import br.com.alterdata.vendas.dto.UserRequest;
 import br.com.alterdata.vendas.handler.excepition.InvalidPasswordException;
 import br.com.alterdata.vendas.model.User;
 import br.com.alterdata.vendas.security.jwt.JwtService;
@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO save(@RequestBody @Valid UserDTO user){
+    public UserRequest save(@RequestBody @Valid UserRequest user){
         String encrypted = encoder.encode(user.getPassword());
         user.setPassword(encrypted);
         return userService.save(user);
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDTO authenticate(@RequestBody @Valid LoginDTO dto){
+    public TokenResponse authenticate(@RequestBody @Valid LoginRequest dto){
         try {
             UserDetails authUser = userService.authenticate(dto);
 
@@ -56,7 +56,7 @@ public class UserController {
                     .build();
 
             String token = jwtService.generateToken(user);
-            return new TokenDTO(user.getLogin(), token);
+            return new TokenResponse(user.getLogin(), token);
 
         }catch (UsernameNotFoundException | InvalidPasswordException ex){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
@@ -65,7 +65,7 @@ public class UserController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> findAll(){
+    public List<UserRequest> findAll(){
         return userService.findAll();
     }
 }
