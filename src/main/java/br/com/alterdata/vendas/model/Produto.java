@@ -12,21 +12,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.modelmapper.ModelMapper;
-
 import com.sun.istack.NotNull;
 
-import br.com.alterdata.vendas.dto.ProdutoDTO;
+import br.com.alterdata.vendas.dto.ProdutoCriacaoRequest;
+import br.com.alterdata.vendas.dto.ProdutoEdicaoRequest;
 import br.com.alterdata.vendas.service.CategoriaService;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "produtos")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Produto {
 
 	@Id
@@ -50,15 +52,19 @@ public class Produto {
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
-	public void edita(ProdutoDTO atualizaProduto, ModelMapper modelMapper, CategoriaService categoriaService) {
-		this.nome = atualizaProduto.getNome();
-		this.descricao = atualizaProduto.getDescricao();
-		this.referencia = atualizaProduto.getReferencia();
-		this.valorUnitario = atualizaProduto.getValorUnitario();
-		if (atualizaProduto.getCategoria() != null && atualizaProduto.getCategoria().getNome() != null) {
-	        Categoria categoria = categoriaService.obterOuCriarCategoria(atualizaProduto.getCategoria().getNome());
-	        this.categoria = categoria;
-	    }
-		
+	public Produto(ProdutoCriacaoRequest produtoDTO, CategoriaService categoriaService) {
+		this.nome = produtoDTO.getNome();
+		this.descricao = produtoDTO.getDescricao();
+		this.referencia = produtoDTO.getReferencia();
+		this.valorUnitario = produtoDTO.getValorUnitario();
+		this.categoria = categoriaService.buscaCategoriaPorId(produtoDTO.getIdCategoria());
+	}
+
+	public void edita(ProdutoEdicaoRequest produtoEdicaoRequest, CategoriaService categoriaService) {
+		this.nome = produtoEdicaoRequest.getNome();
+		this.descricao = produtoEdicaoRequest.getDescricao();
+		this.referencia = produtoEdicaoRequest.getReferencia();
+		this.valorUnitario = produtoEdicaoRequest.getValorUnitario();
+		this.categoria = categoriaService.buscaCategoriaPorId(produtoEdicaoRequest.getIdCategoria());
 	}
 }
