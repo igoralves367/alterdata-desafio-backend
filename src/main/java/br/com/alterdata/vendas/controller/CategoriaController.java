@@ -3,7 +3,6 @@ package br.com.alterdata.vendas.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,9 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.alterdata.vendas.dto.CategoriaDTO;
+import br.com.alterdata.vendas.dto.CategoriaEdicaoRequest;
+import br.com.alterdata.vendas.dto.CategoriaRequest;
+import br.com.alterdata.vendas.dto.CategoriaResponse;
 import br.com.alterdata.vendas.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,56 +30,57 @@ public class CategoriaController {
 	private final CategoriaService categoriaService;
 
 	@PostMapping
-	public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody CategoriaDTO categoria) {
-		log.info("[start] CategoriaController - criarCategoria");
-		CategoriaDTO criarCategoria = categoriaService.salvarCategoria(categoria);
-		log.info("[finish] CategoriaController - criarCategoria");
-		return new ResponseEntity<>(criarCategoria, HttpStatus.CREATED);
+	@ResponseStatus(HttpStatus.CREATED)
+	public CategoriaResponse criarCategoria(@RequestBody CategoriaRequest categoria) {
+		log.debug("[start] CategoriaController - criarCategoria");
+		CategoriaResponse criarCategoria = categoriaService.salvarCategoria(categoria);
+		log.debug("[finish] CategoriaController - criarCategoria");
+		return criarCategoria;
 	}
 
-	@GetMapping("/listarCategorias")
-	public ResponseEntity<List<CategoriaDTO>> listar() {
-		log.info("[start] CategoriaController - ListaCategorias");
-		List<CategoriaDTO> ListaCategorias = categoriaService.listaCategorias();
-		log.info("[finish] CategoriaController - ListaCategorias");
-		return new ResponseEntity<>(ListaCategorias, HttpStatus.OK);
+	@GetMapping
+	public List<CategoriaResponse> listar() {
+		log.debug("[start] CategoriaController - ListaCategorias");
+		List<CategoriaResponse> categorias = categoriaService.listaCategorias();
+		log.debug("[finish] CategoriaController - ListaCategorias");
+		return categorias;
 	}
 
-	@GetMapping("/buscarProduto/{id}")
-	public ResponseEntity<CategoriaDTO> buscarCategoriaPorId(@PathVariable Long id) {
-		log.info("[start] CategoriaController - buscarCategoriaPorId");
-		log.info("[idCategoria] {}", id);
-		CategoriaDTO categoria = categoriaService.buscarCategoriaPorId(id);
-		log.info("[finish] CategoriaController - buscarCategoriaPorId");
-		return new ResponseEntity<>(categoria, HttpStatus.OK);
+	@GetMapping("/{id}")
+	public CategoriaResponse buscarCategoriaPorId(@PathVariable Long id) {
+		log.debug("[start] CategoriaController - buscarCategoriaPorId");
+		log.debug("[idCategoria] {}", id);
+		CategoriaResponse categoria = categoriaService.buscarCategoriaPorId(id);
+		log.debug("[finish] CategoriaController - buscarCategoriaPorId");
+		return categoria;
+	}
+	
+	@GetMapping("/pesquisa")
+	public CategoriaResponse encontrarCategoriaPorNome(@RequestParam String nome) {
+		log.debug("[start] CategoriaController - encontrarCategoriaPorNome");
+		log.debug("[nomeCategoria] {}", nome);
+		CategoriaResponse categoria = categoriaService.obterCategoriaPorNome(nome);
+		log.debug("[finish] CategoriaController - encontrarCategoriaPorNome");
+		return categoria;
 	}
 
-	@GetMapping("/categoria/{nome}")
-	public ResponseEntity<CategoriaDTO> encontrarCategoriaPorNome(@PathVariable String nome) {
-		log.info("[start] CategoriaController - encontrarCategoriaPorNome");
-		log.info("[nomeCategoria] {}", nome);
-		CategoriaDTO categoria = categoriaService.obterCategoriaPorNome(nome);
-		log.info("[finish] CategoriaController - encontrarCategoriaPorNome");
-		return new ResponseEntity<>(categoria, HttpStatus.OK);
-	}
-
-	@DeleteMapping("/deletarCategoria/{id}")
-	public ResponseEntity<Void> excluirCategoria(@PathVariable Long id) {
-		log.info("[start] CategoriaController - excluirCategoria");
-		log.info("[idCategoria] {}", id);
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluirCategoria(@PathVariable Long id) {
+		log.debug("[start] CategoriaController - excluirCategoria");
+		log.debug("[idCategoria] {}", id);
 		categoriaService.excluirCategoria(id);
-		log.info("[finish] CategoriaController - excluirCategoria");
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		log.debug("[finish] CategoriaController - excluirCategoria");
 	}
 
-	@PutMapping("/ataulizaCategoria/{id}")
-	public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable Long id,
-			@RequestBody String novoNomeCategoria) {
-		log.info("[start] CategoriaController - atualizarCategoria");
-		log.info("[idCategoria] {}", id);
-		CategoriaDTO updatedCategoria = categoriaService.atualizarCategoria(id, novoNomeCategoria);
-		log.info("[start] CategoriaController - atualizarCategoria");
-		return new ResponseEntity<>(updatedCategoria, HttpStatus.OK);
+	@PutMapping("/{id}")
+	public CategoriaResponse atualizarCategoria(@PathVariable Long id,
+			@RequestBody CategoriaEdicaoRequest atualizaCategoria) {
+		log.debug("[start] CategoriaController - atualizarCategoria");
+		log.debug("[idCategoria] {}", id);
+		CategoriaResponse alterarCategoria = categoriaService.atualizarCategoria(id, atualizaCategoria);
+		log.debug("[start] CategoriaController - atualizarCategoria");
+		return alterarCategoria;
 	}
-
+	
 }

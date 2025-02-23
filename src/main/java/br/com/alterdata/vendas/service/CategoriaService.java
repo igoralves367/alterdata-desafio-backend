@@ -1,16 +1,17 @@
 package br.com.alterdata.vendas.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import br.com.alterdata.vendas.dto.CategoriaDTO;
+import br.com.alterdata.vendas.dto.CategoriaEdicaoRequest;
+import br.com.alterdata.vendas.dto.CategoriaRequest;
+import br.com.alterdata.vendas.dto.CategoriaResponse;
 import br.com.alterdata.vendas.handler.APIException;
 import br.com.alterdata.vendas.model.Categoria;
 import br.com.alterdata.vendas.repository.CategoriaRepository;
+import br.com.alterdata.vendas.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -20,79 +21,73 @@ import lombok.extern.log4j.Log4j2;
 public class CategoriaService {
 
 	public final CategoriaRepository categoriaRepository;
-	private final ModelMapper modelMapper;
+	public final ProdutoRepository produtoRepository;
 
-	public CategoriaDTO salvarCategoria(CategoriaDTO categoriaDto) {
-		log.info("[start] CategoriaService - salvarCategoria");
-		if (categoriaRepository.existsByNomeIgnoreCase(categoriaDto.getNome())) {
-			throw APIException.build(HttpStatus.BAD_REQUEST, "Categoria já cadastrada.");
-		}
-
-		Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
-		Categoria categoriaSalva = categoriaRepository.save(categoria);
-		log.info("[finish] CategoriaService - salvarCategoria");
-		return modelMapper.map(categoriaSalva, CategoriaDTO.class);
+	public CategoriaResponse salvarCategoria(CategoriaRequest categoriaRequest) {
+		log.debug("[start] CategoriaService - salvarCategoria");
+		Categoria categoria = new Categoria(categoriaRequest);
+		categoriaRepository.save(categoria);
+		log.debug("[finish] CategoriaService - salvarCategoria");
+		return new CategoriaResponse(categoria);
 	}
 
-	public Categoria obterOuCriarCategoria(String nomeCategoria) {
-		log.info("[start] CategoriaService - obterOuCriarCategoria");
-		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
-		if (categoria == null) {
-			categoria = new Categoria();
-			categoria.setNome(nomeCategoria);
-			categoria = categoriaRepository.save(categoria);
-		}
-		log.info("[finish] CategoriaService - obterOuCriarCategoria");
+	public CategoriaResponse obterCategoriaPorNome(String nomeCategoria) {
+		log.debug("[start] CategoriaService - obterCategoriaPorNome");
+		log.debug("[nomeCategoria] {}", nomeCategoria);
+		Categoria categoria = categoriaRepository.findByNome(nomeCategoria)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+		log.debug("[finish] CategoriaService - obterCategoriaPorNome");
+		return new CategoriaResponse(categoria);
+	}
+
+	public List<CategoriaResponse> listaCategorias() {
+		log.debug("[start] CategoriaService - listaCategorias");
+		List<Categoria> categorias = categoriaRepository.findAll();
+		log.debug("[finish] CategoriaService - listaCategorias");
+		return CategoriaResponse.converte(categorias);
+	}
+
+	public CategoriaResponse buscarCategoriaPorId(Long id) {
+		log.debug("[start] CategoriaService - buscarCategoriaPorId");
+		log.debug("[idCategoria] {}", id);
+		Categoria categoria = buscaPorId(id);
+		log.debug("[finish] CategoriaService - buscarCategoriaPorId");
+		return new CategoriaResponse(categoria);
+	}
+
+	private Categoria buscaPorId(Long id) {
+		Categoria categoria = categoriaRepository.findById(id)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
 		return categoria;
 	}
 
-	public CategoriaDTO obterCategoriaPorNome(String nomeCategoria) {
-		log.info("[start] CategoriaService - obterCategoriaPorNome");
-		log.info("[nomeCategoria] {}", nomeCategoria);
-		Categoria categoria = categoriaRepository.findByNome(nomeCategoria);
-		if (categoria == null) {
-			throw APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada");
-		}
-		log.info("[finish] CategoriaService - obterCategoriaPorNome");
-		return modelMapper.map(categoria, CategoriaDTO.class);
+	public Categoria buscaCategoriaPorId(Long id) {
+		log.debug("[start] CategoriaService - buscarCategoriaPorId");
+		log.debug("[idCategoria] {}", id);
+		Categoria categoria = buscaPorId(id);
+		log.debug("[finish] CategoriaService - buscarCategoriaPorId");
+		return categoria;
 	}
-
-	public List<CategoriaDTO> listaCategorias() {
-		log.info("[start] CategoriaService - listaCategorias");
-		List<Categoria> categorias = categoriaRepository.findAll();
-		log.info("[finish] CategoriaService - listaCategorias");
-		return categorias.stream()
-				.map(categoria -> modelMapper.map(categoria, CategoriaDTO.class))
-				.collect(Collectors.toList());
-	}
-
-	public CategoriaDTO buscarCategoriaPorId(Long id) {
-		log.info("[start] CategoriaService - buscarCategoriaPorId");
-		log.info("[idCategoria] {}", id);
-		 Categoria categoria = categoriaRepository.findById(id)
-				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-		 log.info("[finish] CategoriaService - buscarCategoriaPorId");
-	        return modelMapper.map(categoria, CategoriaDTO.class);
-	    }
-
+	
 	public void excluirCategoria(Long id) {
-		log.info("[start] ProdutoService - excluirCategoria");
-		log.info("[idCategoria] {}", id);
-		Categoria categoria = categoriaRepository.findById(id)
-				 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-		categoriaRepository.delete(categoria);
-		log.info("[finish] ProdutoService - excluirCategoria");
-		
+	    log.debug("[start] CategoriaService - excluirCategoria");
+	    log.debug("[idCategoria] {}", id);
+	    Categoria categoria = buscaPorId(id);
+	    boolean possuiProdutos = produtoRepository.existsByCategoria(categoria);
+	    if (possuiProdutos) {
+	        throw APIException.build(HttpStatus.BAD_REQUEST, "Não é possível excluir a categoria pois há produtos associados a ela.");
+	    }
+	    categoriaRepository.delete(categoria);
+	    log.debug("[finish] CategoriaService - excluirCategoria");
 	}
 
-	public CategoriaDTO atualizarCategoria(Long id, String novoNomeCategoria) {
-		log.info("[start] CategoriaService - atualizarCategoria");
-		log.info("[idCategoria] {}", id);
-		Categoria categoriaAtual = categoriaRepository.findById(id)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-        categoriaAtual.setNome(novoNomeCategoria);
-        log.info("[finish] CategoriaService - atualizarCategoria");
-        Categoria updatedCategoria = categoriaRepository.save(categoriaAtual);
-        return modelMapper.map(updatedCategoria, CategoriaDTO.class);
+	public CategoriaResponse atualizarCategoria(Long id, CategoriaEdicaoRequest atualizaCategoria) {
+		log.debug("[start] CategoriaService - atualizarCategoria");
+		log.debug("[idCategoria] {}", id);
+		Categoria categoriaNova = buscaPorId(id);
+		categoriaNova.edita(atualizaCategoria);
+		categoriaRepository.save(categoriaNova);
+		log.debug("[finish] CategoriaService - atualizarCategoria");
+		return new CategoriaResponse(categoriaNova);
 	}
 }
