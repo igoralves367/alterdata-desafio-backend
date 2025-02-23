@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import br.com.alterdata.vendas.VendasApplication;
@@ -24,6 +25,7 @@ import br.com.alterdata.vendas.VendasApplication;
 @SpringBootTest(classes = {VendasApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Tag("integracao")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional 
 public class UserControllerIT {
 
     @Autowired
@@ -112,4 +114,5 @@ public class UserControllerIT {
                 .andDo(print())
                 .andExpect(status().isNotFound()); 
     }
+
 }
