@@ -64,7 +64,7 @@ O projeto consiste em uma **API para e-commerce**, e a listagem de produtos já 
 Para facilitar os testes da API, utilize a Collection do Postman disponível no repositório.
 
 📌 Baixe a Collection do Postman aqui: 
- ```bash
+
 🔗 https://github.com/igoralves367/alterdata-desafio-backend/blob/develop/AltterDataDesafio.postman_collection.json
 
 - Importe a collection no Postman para testar os endpoints da API.
